@@ -5,13 +5,38 @@ authors = []
 telemetry = true
 cache_dir = './.cache'
 requirements = []
+[contracts.core]
+path = 'contracts/core.clar'
+clarity_version = 2
+epoch = 2.4
+
+[contracts.executor-dao]
+path = 'contracts/executor-dao.clar'
+clarity_version = 2
+epoch = 2.4
+
 [contracts.extension-trait]
 path = 'contracts/extension-trait.clar'
 clarity_version = 2
 epoch = 2.4
 
+[contracts.membership-token]
+path = 'contracts/membership-token.clar'
+clarity_version = 2
+epoch = 2.4
+
+[contracts.proposal-submission]
+path = 'contracts/proposal-submission.clar'
+clarity_version = 2
+epoch = 2.4
+
 [contracts.proposal-trait]
 path = 'contracts/proposal-trait.clar'
+clarity_version = 2
+epoch = 2.4
+
+[contracts.proposal-voting]
+path = 'contracts/proposal-voting.clar'
 clarity_version = 2
 epoch = 2.4
 [repl.analysis]
