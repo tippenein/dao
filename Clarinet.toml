@@ -1,0 +1,24 @@
+[project]
+name = 'dao'
+description = ''
+authors = []
+telemetry = true
+cache_dir = './.cache'
+requirements = []
+[contracts.extension-trait]
+path = 'contracts/extension-trait.clar'
+clarity_version = 2
+epoch = 2.4
+
+[contracts.proposal-trait]
+path = 'contracts/proposal-trait.clar'
+clarity_version = 2
+epoch = 2.4
+[repl.analysis]
+passes = ['check_checker']
+
+[repl.analysis.check_checker]
+strict = false
+trusted_sender = false
+trusted_caller = false
+callee_filter = false
