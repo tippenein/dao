@@ -1,5 +1,7 @@
-
 import { describe, expect, it } from "vitest";
+import { initSimnet } from '@hirosystems/clarinet-sdk';
+
+const simnet = await initSimnet();
 
 const accounts = simnet.getAccounts();
 const address1 = accounts.get("wallet_1")!;

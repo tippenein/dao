@@ -6,9 +6,11 @@
 (define-constant ERR_UNAUTHORIZED (err u2000))
 (define-constant ERR_NOT_TOKEN_OWNER (err u2001))
 (define-constant ERR_MEMBERSHIP_LIMIT_REACHED (err u2002))
+(define-constant ERR_TOTAL_SUPPLY (err u2003))
 
 (define-fungible-token sGrant)
 
+(define-constant membershipLimit u1500)
 (define-data-var tokenName (string-ascii 32) "sGrant")
 (define-data-var tokenSymbol (string-ascii 10) "SGT")
 (define-data-var tokenUri (optional (string-utf8 256)) none)
@@ -19,9 +21,14 @@
 )
 
 (define-public (mint (amount uint) (recipient principal))
-  (begin
-    (try! (is-dao-or-extension))
-    (ft-mint? sGrant amount recipient)
+  (let ((supply (unwrap! (get-total-supply) ERR_TOTAL_SUPPLY)))
+      (if (>= membershipLimit (+ amount supply))
+        ERR_MEMBERSHIP_LIMIT_REACHED
+        (begin
+            (try! (is-dao-or-extension))
+            (ft-mint? sGrant amount recipient)
+        )
+      )
   )
 )
 
