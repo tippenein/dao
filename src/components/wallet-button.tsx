@@ -14,14 +14,16 @@ const WalletButton: React.FC<WalletButtonProps> = ({
 }) => {
   return !userData ? (
     <button
-      className="p-4 bg-indigo-500 rounded text-white"
+      style={{ width: '100%' }}
+      className="p-4 bg-indigo-500 hover:bg-indigo-700 text-white"
       onClick={connectWallet}
     >
       Connect wallet
     </button>
   ) : (
     <button
-      className="p-4 bg-indigo-500 rounded text-white"
+      style={{ width: '100%' }}
+      className="p-4 bg-indigo-500 hover:bg-indigo-700 text-white"
       onClick={disconnectWallet}
     >
       Disconnect wallet

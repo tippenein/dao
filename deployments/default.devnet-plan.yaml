@@ -9,10 +9,45 @@ plan:
     - id: 0
       transactions:
         - contract-publish:
-            contract-name: keys
+            contract-name: extension-trait
             expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            cost: 34200
-            path: contracts/keys.clar
+            cost: 1630
+            path: contracts/extension-trait.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: proposal-trait
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 1510
+            path: contracts/proposal-trait.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: core
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 24860
+            path: contracts/core.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: membership-token
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 15900
+            path: contracts/membership-token.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: proposal-voting
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 26010
+            path: contracts/proposal-voting.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: proposal-submission
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 12130
+            path: contracts/proposal-submission.clar
             anchor-block-only: true
             clarity-version: 2
       epoch: "2.4"
