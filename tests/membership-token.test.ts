@@ -41,12 +41,12 @@ describe('membership tokens', () => {
     const result = mint(1000, deployer);
     expect(result).toStrictEqual(Cl.ok(Cl.bool(true)));
   });
-  // it('shows correct total-supply', () => {
-  //   mint(10, address2);
-  //   expect(readFn('get-total-supply', address2)).toStrictEqual(
-  //     Cl.ok(Cl.uint(1010))
-  //   );
-  // });
+  it('shows correct total-supply', () => {
+    mint(10, address2);
+    expect(readFn('get-total-supply', address2, [])).toStrictEqual(
+      Cl.ok(Cl.uint(1010))
+    );
+  });
   // it('disallows creating over the membership limit', () => {
   //   const result = mint(2000, address1);
   //   expect(result).toStrictEqual(Cl.uint(2002));

@@ -10,11 +10,6 @@ path = 'contracts/core.clar'
 clarity_version = 2
 epoch = 2.4
 
-[contracts.executor-dao]
-path = 'contracts/executor-dao.clar'
-clarity_version = 2
-epoch = 2.4
-
 [contracts.extension-trait]
 path = 'contracts/extension-trait.clar'
 clarity_version = 2

@@ -33,6 +33,20 @@
   )
 )
 
+(define-private (set-extensions-iter (item {extension: principal, enabled: bool}))
+	(begin
+		(print {event: "extension", extension: (get extension item), enabled: (get enabled item)})
+		(map-set extensions (get extension item) (get enabled item))
+	)
+)
+
+(define-public (set-extensions (extension-list (list 200 {extension: principal, enabled: bool})))
+	(begin
+		(try! (is-self-or-extension))
+		(ok (map set-extensions-iter extension-list))
+	)
+)
+
 (define-public (execute (proposal <proposal-trait>) (sender principal))
   (begin
     (try! (is-self-or-extension))
