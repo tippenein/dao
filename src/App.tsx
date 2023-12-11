@@ -9,6 +9,7 @@ import {
 } from '@stacks/connect-react';
 
 import { Home } from './pages/Home';
+import WalletButton from './components/wallet-button';
 
 const appDetails = {
   name: 'DAO',
@@ -59,21 +60,11 @@ function App(): ReactElement {
     <Connect authOptions={authOptions}>
       <div className="flex items-center justify-center min-h-screen">
         <div className="mx-auto max-w-2xl px-4">
-          {!userData ? (
-            <button
-              className="p-4 bg-indigo-500 rounded text-white"
-              onClick={connectWallet}
-            >
-              Connect wallet
-            </button>
-          ) : (
-            <button
-              className="p-4 bg-indigo-500 rounded text-white"
-              onClick={disconnectWallet}
-            >
-              Disconnect wallet
-            </button>
-          )}
+          <WalletButton
+            userData={userData}
+            connectWallet={connectWallet}
+            disconnectWallet={disconnectWallet}
+          />
           <div className="rounded-lg border bg-background p-8">
             <Home />
           </div>

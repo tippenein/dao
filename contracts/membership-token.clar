@@ -17,12 +17,12 @@
 (define-data-var tokenDecimals uint u6)
 
 (define-public (is-dao-or-extension)
-  (ok (asserts! (or (is-eq tx-sender .core) (contract-call? .core is-extension contract-caller)) ERR_UNAUTHORIZED))
+  (ok (asserts! (or (is-eq tx-sender (as-contract tx-sender)) (contract-call? .core is-extension contract-caller)) ERR_UNAUTHORIZED))
 )
 
 (define-public (mint (amount uint) (recipient principal))
   (let ((supply (unwrap! (get-total-supply) ERR_TOTAL_SUPPLY)))
-      (if (>= membershipLimit (+ amount supply))
+      (if (> (+ amount supply) membershipLimit)
         ERR_MEMBERSHIP_LIMIT_REACHED
         (begin
             (try! (is-dao-or-extension))

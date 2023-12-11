@@ -1,11 +1,9 @@
-# Friend.tech
-
-WIP Hiro Hacks series 1
+# DAO Town
 
 - [x] basic contract functionality and testing
 - [x] app connected
-- [ ] buy keys
-- [ ] open chat
+- [ ] proposals
+- [ ] voting
 
 ## Getting Started
 
