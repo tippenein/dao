@@ -14,3 +14,6 @@ bun install
 bun run dev
 clarinet deployment apply -p deployments/bootstrap.devnet-plan.yaml
 ```
+
+![main](./member-view.png)
+![proposal](./proposal.png)
