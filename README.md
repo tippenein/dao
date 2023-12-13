@@ -2,7 +2,9 @@
 
 - [x] basic contract functionality and testing
 - [x] app connected
-- [ ] proposals
+- [x] proposal submit contracts and FE
+- [x] proposal viewing contract
+- [ ] proposal viewing FE
 - [ ] voting
 
 ## Getting Started
