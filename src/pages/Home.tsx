@@ -2,7 +2,7 @@ import { useState, type JSX, useEffect } from 'react';
 import { Button } from '../components/ui/button';
 import { Input } from '@/components/ui/input';
 import { truncateAddress } from '@/lib/utils';
-import { useConnect } from '@stacks/connect-react';
+import { UserSession, useConnect } from '@stacks/connect-react';
 import {
   StacksDevnet,
   StacksMocknet,
@@ -20,9 +20,8 @@ import { OnboardingView } from './OnboardingView';
 import { env, CONTRACT_ADDRESS, network } from '@/utils';
 import { InfoBar } from '@/components/InfoBar';
 
-export const Home: React.FC = () => {
+export const Home: React.FC<{ userSession: UserSession }> = ({userSession}) => {
   const { doContractCall } = useConnect();
-  const [address, setAddress] = useState('');
   const [totalSupply, setTotalSupply] = useState(null);
   const [isMember, setIsMember] = useState(false);
 
@@ -38,12 +37,18 @@ export const Home: React.FC = () => {
     return cvToValue(result).value;
   };
   const getBalance = async () => {
+    const userData = userSession.loadUserData()
+    console.log(userData)
+    const address = userData.profile.stxAddress.testnet
+    console.log(address)
+
+    // userData.profile.stxAddress.devnet
     const result = await callReadOnlyFunction({
       network,
       contractAddress: CONTRACT_ADDRESS,
       contractName: 'membership-token',
       functionName: 'get-balance',
-      functionArgs: [standardPrincipalCV(CONTRACT_ADDRESS)],
+      functionArgs: [standardPrincipalCV(address)],
       senderAddress: CONTRACT_ADDRESS
     });
     console.log(result)
@@ -63,7 +68,6 @@ export const Home: React.FC = () => {
   return (
     <>
       <h1 className="text-4xl font-bold">DAO Town</h1>
-      {address && <span>{truncateAddress(address)}</span>}
       <InfoBar />
       <div className="h-60 sm:h-72 flex items-center justify-center">
         <div className="py-4">

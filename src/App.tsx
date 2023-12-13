@@ -61,7 +61,7 @@ function App(): ReactElement {
       <div className="flex items-center justify-center min-h-screen">
         <div className="mx-auto max-w-2xl px-4">
           <div className="border bg-background p-8">
-            <Home />
+            <Home userSession={userSession} />
           </div>
           <WalletButton
             userData={userData}
