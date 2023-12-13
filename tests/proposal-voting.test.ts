@@ -1,23 +1,36 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from 'vitest';
 import { initSimnet } from '@hirosystems/clarinet-sdk';
+import { Cl, ClarityValue, cvToValue } from '@stacks/transactions';
 
 const simnet = await initSimnet();
 
 const accounts = simnet.getAccounts();
-const address1 = accounts.get("wallet_1")!;
+const deployer = accounts.get('deployer')!;
+const address1 = accounts.get('wallet_1')!;
 
-/*
-  The test below is an example. To learn more, read the testing documentation here:
-  https://docs.hiro.so/clarinet/feature-guides/test-contract-with-clarinet-sdk
-*/
+const err = (val: number) => {
+  return Cl.error(Cl.uint(val));
+};
 
-describe("example tests", () => {
-  it("ensures simnet is well initalised", () => {
-    expect(simnet.blockHeight).toBeDefined();
-  });
+const callPub = (method: string, sender: string, args: any[]) => {
+  const { result } = simnet.callPublicFn(
+    'proposal-voting',
+    method,
+    args,
+    sender
+  );
+  return result;
+};
 
-  // it("shows an example", () => {
-  //   const { result } = simnet.callReadOnlyFn("counter", "get-counter", [], address1);
-  //   expect(result).toBeUint(0);
-  // });
+const readFn = (method: string, sender: string, args: any[]) => {
+  const { result } = simnet.callReadOnlyFn(
+    'proposal-voting',
+    method,
+    args,
+    sender
+  );
+  return result;
+};
+
+describe('Proposal voting', () => {
 });
