@@ -2,7 +2,7 @@ import { useState, type JSX, useEffect } from 'react';
 import { Button } from '../components/ui/button';
 import { Input } from '@/components/ui/input';
 import { truncateAddress } from '@/lib/utils';
-import { UserSession, useConnect } from '@stacks/connect-react';
+import { UserSession, openContractCall, useConnect } from '@stacks/connect-react';
 import { env, CONTRACT_ADDRESS, network } from '@/utils';
 import {
   callReadOnlyFunction,
@@ -12,56 +12,28 @@ import {
   PrincipalCV
 } from '@stacks/transactions';
 import { Divider } from '@/components/ui/divider';
+import { Membership } from '@/data/Membership';
 
 export const MemberView: React.FC<{ address: PrincipalCV }> = ({ address }) => {
   const [amount, setAmount] = useState(1);
   const [recipient, setRecipient] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { doContractCall } = useConnect();
+
+  const membershipActions = new Membership(address, doContractCall)
   const handleMint = (event: React.FormEvent) => {
     event.preventDefault();
-    mintNew(amount);
+    membershipActions.mint(amount);
   };
   const handleBurn = (event: React.FormEvent) => {
     event.preventDefault();
-    burn(amount);
+    membershipActions.burn(amount);
   };
   const handleTransfer = async (event: React.FormEvent, recipient: string) => {
     event.preventDefault();
-    await doContractCall({
-      network: network,
-      contractAddress: CONTRACT_ADDRESS,
-      contractName: 'membership-token',
-      functionName: 'transfer',
-      functionArgs: [
-        uintCV(1),
-        standardPrincipalCV(address),
-        standardPrincipalCV(recipient)
-      ]
-    });
-    // Add your transfer logic here
-    console.log(address);
+    membershipActions.transfer(amount, standardPrincipalCV(address))
     setIsModalOpen(false);
   };
-  const burn = async (amount: number) => {
-    await doContractCall({
-      network: network,
-      contractAddress: CONTRACT_ADDRESS,
-      contractName: 'membership-token',
-      functionName: 'burn',
-      functionArgs: [uintCV(1), standardPrincipalCV(address)]
-    });
-  };
-  const mintNew = async (amount: number) => {
-    await doContractCall({
-      network: network,
-      contractAddress: CONTRACT_ADDRESS,
-      contractName: 'membership-token',
-      functionName: 'mint',
-      functionArgs: [uintCV(1), standardPrincipalCV(address)]
-    });
-  };
-
   const onProposeClick = () => {
     console.log('proposal');
   };
