@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  PrincipalCV,
-  callReadOnlyFunction,
-  cvToValue,
-  standardPrincipalCV
-} from '@stacks/transactions';
-import { network, CONTRACT_ADDRESS } from '@/utils';
+import { PrincipalCV } from '@stacks/transactions';
 import { Divider } from './ui/divider';
 import { Membership } from '@/data/Membership';
 import { useConnect } from '@stacks/connect-react';
@@ -16,7 +10,6 @@ export const InfoBar: React.FC<{ address: PrincipalCV }> = ({ address }) => {
 
   useEffect(() => {
     const membershipActions = new Membership(address, doContractCall);
-    console.log(address)
     membershipActions.getTotalSupply().then((ts) => {
       setTotalSupply(ts + 1);
     });

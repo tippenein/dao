@@ -11,7 +11,6 @@ export const Home: React.FC<{ userSession: UserSession }> = ({
   userSession
 }) => {
   const { doContractCall } = useConnect();
-  const [totalSupply, setTotalSupply] = useState(null);
   const [isMember, setIsMember] = useState(false);
 
   // hacky as hell
