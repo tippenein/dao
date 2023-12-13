@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { callReadOnlyFunction, cvToValue } from '@stacks/transactions';
 import { network, CONTRACT_ADDRESS } from '@/utils';
+import { Divider } from './ui/divider';
 
 export const InfoBar: React.FC = () => {
   const [totalSupply, setTotalSupply] = useState<number | null>(null);
@@ -40,14 +41,14 @@ export const InfoBar: React.FC = () => {
 
   return (
     <div className="infographic">
-      <h2>Total Supply</h2>
-      <p>{totalSupply}</p>
+      <h2>Total Supply: {totalSupply}</h2>
       {daoOwner && (
         <>
           <h2>Owner</h2>
           <p>{daoOwner}</p>
         </>
       )}
+      <Divider />
     </div>
   );
 };

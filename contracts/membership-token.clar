@@ -28,7 +28,7 @@
 
 ;; auth
 (define-public (is-dao-or-extension)
-  (ok (asserts! (or (is-eq tx-sender .core) (contract-call? .core is-extension contract-caller)) ERR_UNAUTHORIZED))
+  (ok (asserts! (or (is-eq tx-sender contract-owner) (is-eq tx-sender .core) (contract-call? .core is-extension contract-caller)) ERR_UNAUTHORIZED))
 )
 
 ;; (define-read-only (get-contract-can-mint-by-address (address principal))
@@ -44,12 +44,10 @@
 ;;     (get can-burn (map-get? contracts-data address))
 ;;   )
 ;; )
-
 ;; movement/ transactions
 (define-public (transfer (amount uint) (sender principal) (recipient principal))
 	(begin
-    ;; (try! (is-dao-or-extension))
-    (asserts! (is-eq tx-sender contract-owner) ERR_UNAUTHORIZED)
+    (try! (is-dao-or-extension))
 		(ft-transfer? sGrant amount sender recipient)
 	)
 )
@@ -59,8 +57,7 @@
       (if (> (+ amount supply) membershipLimit)
         ERR_MEMBERSHIP_LIMIT_REACHED
         (begin
-          ;; (try! (is-dao-or-extension))
-          (asserts! (is-eq tx-sender contract-owner) ERR_UNAUTHORIZED)
+          (try! (is-dao-or-extension))
           (print { type: "token", action: "minted", data: { amount: amount, recipient: recipient } })
           ;; (contract-call? token mint-for-dao amount recipient)
           (ft-mint? sGrant amount recipient)
@@ -77,8 +74,7 @@
     (if (< balance amount)
       ERR_OVERBURN
       (begin
-        ;; (try! (is-dao-or-extension))
-        (asserts! (is-eq tx-sender contract-owner) ERR_UNAUTHORIZED)
+        (try! (is-dao-or-extension))
         (ft-burn? sGrant amount owner)
       )
     )

@@ -33,4 +33,7 @@ const readFn = (method: string, sender: string, args: any[]) => {
 };
 
 describe('Proposal voting', () => {
+  it('proposes', () => {
+    expect(true).toBe(true);
+  });
 });

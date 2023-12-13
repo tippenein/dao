@@ -9,7 +9,11 @@ import {
   StacksMainnet,
   StacksTestnet
 } from '@stacks/network';
-import { AnchorMode, cvToValue } from '@stacks/transactions';
+import {
+  AnchorMode,
+  contractPrincipalCV,
+  cvToValue
+} from '@stacks/transactions';
 import {
   callReadOnlyFunction,
   standardPrincipalCV,
@@ -20,8 +24,11 @@ import { OnboardingView } from './OnboardingView';
 import { env, CONTRACT_ADDRESS, network } from '@/utils';
 import { InfoBar } from '@/components/InfoBar';
 
-export const Home: React.FC<{ userSession: UserSession }> = ({userSession}) => {
+export const Home: React.FC<{ userSession: UserSession }> = ({
+  userSession
+}) => {
   const { doContractCall } = useConnect();
+  const [address, setAddress] = useState('');
   const [totalSupply, setTotalSupply] = useState(null);
   const [isMember, setIsMember] = useState(false);
 
@@ -36,11 +43,21 @@ export const Home: React.FC<{ userSession: UserSession }> = ({userSession}) => {
     });
     return cvToValue(result).value;
   };
+  // hacky as hell
+  const bootstrap = async () => {
+    const userData = userSession.loadUserData();
+    const address = userData.profile.stxAddress.testnet;
+
+    await doContractCall({
+      network: network,
+      contractAddress: CONTRACT_ADDRESS,
+      contractName: 'core',
+      functionName: 'construct',
+      functionArgs: [contractPrincipalCV(CONTRACT_ADDRESS, 'bootstrap')],
+      senderAddress: address
+    });
+  };
   const getBalance = async () => {
-    const userData = userSession.loadUserData()
-    console.log(userData)
-    const address = userData.profile.stxAddress.testnet
-    console.log(address)
 
     // userData.profile.stxAddress.devnet
     const result = await callReadOnlyFunction({
@@ -51,18 +68,28 @@ export const Home: React.FC<{ userSession: UserSession }> = ({userSession}) => {
       functionArgs: [standardPrincipalCV(address)],
       senderAddress: CONTRACT_ADDRESS
     });
-    console.log(result)
+    console.log(result);
     return cvToValue(result).value;
   };
   useEffect(() => {
     getBalance().then((balance) => {
       console.log('balance', balance);
-      setIsMember(balance > 0);
+      setIsMember(balance >= 0);
     });
     getTotalSupply().then((ts) => {
       console.log('total supply', ts);
+      // TODO
+      // if (ts == 0) {
+      //   console.log('bootstrapp');
+      //   bootstrap();
+      // }
       setTotalSupply(ts);
+      // TODO
+      setIsMember(true);
     });
+    const userData = userSession.loadUserData();
+    const address = userData.profile.stxAddress.testnet;
+    setAddress(address)
   }, []);
 
   return (
@@ -71,7 +98,11 @@ export const Home: React.FC<{ userSession: UserSession }> = ({userSession}) => {
       <InfoBar />
       <div className="h-60 sm:h-72 flex items-center justify-center">
         <div className="py-4">
-          {isMember ? <MemberView /> : <OnboardingView />}
+          {isMember ? (
+            <MemberView address={address} />
+          ) : (
+            <OnboardingView />
+          )}
         </div>
       </div>
     </>

@@ -1,30 +1,64 @@
-import { useState, type JSX } from 'react';
+import { useState, type JSX, useEffect } from 'react';
 import { Button } from '../components/ui/button';
 import { Input } from '@/components/ui/input';
 import { truncateAddress } from '@/lib/utils';
-import { useConnect } from '@stacks/connect-react';
+import { UserSession, useConnect } from '@stacks/connect-react';
 import { env, CONTRACT_ADDRESS, network } from '@/utils';
 import {
   callReadOnlyFunction,
   standardPrincipalCV,
   cvToValue,
-  uintCV
+  uintCV,
+  PrincipalCV
 } from '@stacks/transactions';
+import { Divider } from '@/components/ui/divider';
 
-export const MemberView: React.FC = () => {
+export const MemberView: React.FC<{ address: PrincipalCV }> = ({ address }) => {
   const [amount, setAmount] = useState(1);
+  const [recipient, setRecipient] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { doContractCall } = useConnect();
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleMint = (event: React.FormEvent) => {
     event.preventDefault();
-    buyMembership(amount);
+    mintNew(amount);
   };
-  const buyMembership = async (amount: number) => {
+  const handleBurn = (event: React.FormEvent) => {
+    event.preventDefault();
+    burn(amount);
+  };
+  const handleTransfer = async (event: React.FormEvent, recipient: string) => {
+    event.preventDefault();
+    await doContractCall({
+      network: network,
+      contractAddress: CONTRACT_ADDRESS,
+      contractName: 'membership-token',
+      functionName: 'transfer',
+      functionArgs: [
+        uintCV(1),
+        standardPrincipalCV(address),
+        standardPrincipalCV(recipient)
+      ]
+    });
+    // Add your transfer logic here
+    console.log(address);
+    setIsModalOpen(false);
+  };
+  const burn = async (amount: number) => {
+    await doContractCall({
+      network: network,
+      contractAddress: CONTRACT_ADDRESS,
+      contractName: 'membership-token',
+      functionName: 'burn',
+      functionArgs: [uintCV(1), standardPrincipalCV(address)]
+    });
+  };
+  const mintNew = async (amount: number) => {
     await doContractCall({
       network: network,
       contractAddress: CONTRACT_ADDRESS,
       contractName: 'membership-token',
       functionName: 'mint',
-      functionArgs: [uintCV(1), standardPrincipalCV(CONTRACT_ADDRESS)]
+      functionArgs: [uintCV(1), standardPrincipalCV(address)]
     });
   };
 
@@ -32,25 +66,82 @@ export const MemberView: React.FC = () => {
     console.log('proposal');
   };
   return (
-    <div>
-      <Button onClick={onProposeClick}>
-        <span>Propose</span>
-      </Button>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Amount:
-          <Input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
-          />
-        </label>
-        <input
-          className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
-          type="submit"
-          value="Buy membership"
-        />
-      </form>
-    </div>
+    <>
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="bg-white p-6 rounded-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <form onSubmit={handleTransfer} className="space-y-4">
+              <label className="block">
+                <span className="text-gray-700">Recipient:</span>
+                <input
+                  type="text"
+                  value={recipient}
+                  onChange={(e) => setRecipient(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                />
+              </label>
+              <div className="flex justify-end">
+                <input
+                  type="submit"
+                  value="Submit"
+                  className="px-4 py-2 text-white bg-indigo-500 rounded hover:bg-indigo-700"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      <div className=" py-8">
+        <h2 className="font-bold">Proposals</h2>
+        <div className="py-2">
+          <Button onClick={onProposeClick}>
+            <span>Propose</span>
+          </Button>
+        </div>
+        <Divider/>
+        <h2 className="font-bold">Supply</h2>
+        <div className="py-2">
+          <label>
+            Amount:
+            <Input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(Number(e.target.value))}
+            />
+          </label>
+          <div className="actions py-2">
+            <Button
+              className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+              type="submit"
+              onClick={handleMint}
+              value="Mint new"
+            >
+              Mint
+            </Button>
+            <Button
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              type="submit"
+              onClick={handleBurn}
+              value="Mint new"
+            >
+              Burn
+            </Button>
+            <Button
+              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => setIsModalOpen(true)}
+            >
+              Transfer
+            </Button>
+          </div>
+        </div>
+
+      </div>
+    </>
   );
 };
