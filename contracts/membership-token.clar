@@ -7,6 +7,7 @@
 (define-constant ERR_NOT_TOKEN_OWNER (err u2001))
 (define-constant ERR_MEMBERSHIP_LIMIT_REACHED (err u2002))
 (define-constant ERR_TOTAL_SUPPLY (err u2003))
+(define-constant ERR_OVERBURN (err u2004))
 
 (define-fungible-token sGrant)
 
@@ -67,10 +68,14 @@
       )
   )
 )
+
 (define-public (burn (amount uint) (owner principal))
-  (let ((supply (unwrap! (get-total-supply) ERR_TOTAL_SUPPLY)))
-    (if (> u1 (- supply amount))
-      ERR_TOTAL_SUPPLY
+  (let (
+      (supply (unwrap! (get-total-supply) ERR_TOTAL_SUPPLY))
+      (balance (unwrap! (get-balance owner) ERR_OVERBURN))
+    )
+    (if (< balance amount)
+      ERR_OVERBURN
       (begin
         ;; (try! (is-dao-or-extension))
         (asserts! (is-eq tx-sender contract-owner) ERR_UNAUTHORIZED)

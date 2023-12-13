@@ -9,6 +9,9 @@ const deployer = accounts.get('deployer')!;
 const address1 = accounts.get('wallet_1')!;
 const address2 = accounts.get('wallet_2')!;
 
+const err = (val: number) => {
+  return Cl.error(Cl.uint(val));
+};
 const callPub = (method: string, sender: string, args: any[]) => {
   const { result } = simnet.callPublicFn(
     'membership-token',
@@ -29,6 +32,19 @@ const readFn = (method: string, sender: string, args: any[]) => {
   return result;
 };
 
+const transfer = (amount: number, sender: string, recip: string) => {
+  return callPub('transfer', deployer, [
+    Cl.uint(amount),
+    Cl.standardPrincipal(sender),
+    Cl.standardPrincipal(recip)
+  ]);
+};
+const burn = (amount: number, burner: string) => {
+  return callPub('burn', deployer, [
+    Cl.uint(amount),
+    Cl.standardPrincipal(burner)
+  ]);
+};
 const mint = (amount: number, recipient: string) => {
   return callPub('mint', deployer, [
     Cl.uint(amount),
@@ -56,8 +72,34 @@ describe('membership tokens', () => {
       Cl.ok(Cl.uint(1010))
     );
   });
+  it('shows correct balance', () => {
+    expect(
+      readFn('get-balance', address2, [Cl.standardPrincipal(address2)])
+    ).toStrictEqual(Cl.ok(Cl.uint(10)));
+    burn(10, address2);
+    expect(
+      readFn('get-balance', address2, [Cl.standardPrincipal(address2)])
+    ).toStrictEqual(Cl.ok(Cl.uint(0)));
+  });
+  it('can not burn more than you have', () => {
+    mint(10, address2);
+    expect(
+      readFn('get-balance', address2, [Cl.standardPrincipal(address2)])
+    ).toStrictEqual(Cl.ok(Cl.uint(10)));
+    const result = burn(11, address2);
+    expect(result).toStrictEqual(err(2004));
+  });
+  it('can transfer', () => {
+    transfer(10, address2, address1);
+    expect(
+      readFn('get-balance', address2, [Cl.standardPrincipal(address2)])
+    ).toStrictEqual(Cl.ok(Cl.uint(0)));
+    expect(
+      readFn('get-balance', address1, [Cl.standardPrincipal(address1)])
+    ).toStrictEqual(Cl.ok(Cl.uint(10)));
+  });
   it('disallows creating over the membership limit', () => {
     const result = mint(20000000, address1);
-    expect(result).toStrictEqual(Cl.error(Cl.uint(2002)));
+    expect(result).toStrictEqual(err(2002));
   });
 });
