@@ -10,4 +10,5 @@
 ```
 bun install
 bun run dev
+clarinet deployment apply -p deployments/bootstrap.devnet-plan.yaml
 ```

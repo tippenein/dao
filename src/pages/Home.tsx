@@ -18,12 +18,25 @@ import {
 import { MemberView } from './MemberView';
 import { OnboardingView } from './OnboardingView';
 import { env, CONTRACT_ADDRESS, network } from '@/utils';
+import { InfoBar } from '@/components/InfoBar';
 
 export const Home: React.FC = () => {
   const { doContractCall } = useConnect();
   const [address, setAddress] = useState('');
+  const [totalSupply, setTotalSupply] = useState(null);
   const [isMember, setIsMember] = useState(false);
 
+  const getTotalSupply = async () => {
+    const result = await callReadOnlyFunction({
+      network,
+      contractAddress: CONTRACT_ADDRESS,
+      contractName: 'membership-token',
+      functionName: 'get-total-supply',
+      functionArgs: [],
+      senderAddress: CONTRACT_ADDRESS
+    });
+    return cvToValue(result).value;
+  };
   const getBalance = async () => {
     const result = await callReadOnlyFunction({
       network,
@@ -33,6 +46,7 @@ export const Home: React.FC = () => {
       functionArgs: [standardPrincipalCV(CONTRACT_ADDRESS)],
       senderAddress: CONTRACT_ADDRESS
     });
+    console.log(result)
     return cvToValue(result).value;
   };
   useEffect(() => {
@@ -40,12 +54,17 @@ export const Home: React.FC = () => {
       console.log('balance', balance);
       setIsMember(balance > 0);
     });
+    getTotalSupply().then((ts) => {
+      console.log('total supply', ts);
+      setTotalSupply(ts);
+    });
   }, []);
 
   return (
     <>
-      <h2>DAO Town</h2>
+      <h1 className="text-4xl font-bold">DAO Town</h1>
       {address && <span>{truncateAddress(address)}</span>}
+      <InfoBar />
       <div className="h-60 sm:h-72 flex items-center justify-center">
         <div className="py-4">
           {isMember ? <MemberView /> : <OnboardingView />}

@@ -3,11 +3,8 @@
 (define-public (execute (sender principal))
   (begin
     ;; Mint initial token supply.
-      (try! (contract-call? .membership-token mint
-        {amount: u9001, recipient: sender})
-      (try! (contract-call? .membership-token mint
-        {amount: u9001, recipient: 'SP380ANQR0PHRGXQWHN7CYMKC8KSJS2MDBZA4EE7S})
-      )
+      ;; (try! (contract-call? .membership-token mint u9001 sender))
+      (try! (contract-call? .membership-token mint u9001 'ST380ANQR0PHRGXQWHN7CYMKC8KSJS2MDBW5KDVB3))
       (print "DAO bootstrapped")
       (ok true)
   )

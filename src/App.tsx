@@ -13,7 +13,7 @@ import WalletButton from './components/wallet-button';
 
 const appDetails = {
   name: 'DAO Town',
-  icon: 'favicon.ico'
+  icon: './src/favicon.ico'
 };
 
 function App(): ReactElement {
@@ -52,8 +52,8 @@ function App(): ReactElement {
   const connectWallet = () => {
     showConnect({
       appDetails,
-      onFinish: () => window.location.reload(),
-      userSession
+      userSession,
+      onFinish: () => window.location.reload()
     });
   };
   return (

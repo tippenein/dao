@@ -37,6 +37,14 @@ const mint = (amount: number, recipient: string) => {
 };
 
 describe('membership tokens', () => {
+  it('sets the dao owner initially', () => {
+    const result = callPub('set-dao-owner', deployer, [
+      Cl.standardPrincipal(deployer)
+    ]);
+    expect(result).toStrictEqual(Cl.ok(Cl.bool(true)));
+    const owner = readFn('get-dao-owner', deployer, []);
+    expect(owner).toStrictEqual(Cl.standardPrincipal(deployer));
+  });
   it('can be minted', () => {
     const result = mint(1000, deployer);
     expect(result).toStrictEqual(Cl.ok(Cl.bool(true)));
