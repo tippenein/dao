@@ -24,28 +24,29 @@
 (define-data-var tokenUri (optional (string-utf8 256)) none)
 (define-data-var tokenDecimals uint u6)
 
-(define-read-only (get-contract-can-mint-by-address (address principal))
-  (default-to
-    false
-    (get can-mint (map-get? contracts-data address))
-  )
+;; auth
+(define-public (is-dao-or-extension)
+  (ok (asserts! (or (is-eq tx-sender .core) (contract-call? .core is-extension contract-caller)) ERR_UNAUTHORIZED))
 )
 
-(define-read-only (get-contract-can-burn-by-address (address principal))
-  (default-to
-    false
-    (get can-burn (map-get? contracts-data address))
-  )
-)
-
-;; (define-public (is-dao-or-extension)
-;;   (ok (asserts! (or (is-eq tx-sender .core) (contract-call? .core is-extension contract-caller)) ERR_UNAUTHORIZED))
+;; (define-read-only (get-contract-can-mint-by-address (address principal))
+;;   (default-to
+;;     false
+;;     (get can-mint (map-get? contracts-data address))
+;;   )
 ;; )
 
+;; (define-read-only (get-contract-can-burn-by-address (address principal))
+;;   (default-to
+;;     false
+;;     (get can-burn (map-get? contracts-data address))
+;;   )
+;; )
 
+;; movement/ transactions
 (define-public (transfer (amount uint) (sender principal) (recipient principal))
 	(begin
-    (asserts! (get-contract-can-mint-by-address contract-caller) ERR_UNAUTHORIZED)
+    (try! (is-dao-or-extension))
 		(ft-transfer? sGrant amount sender recipient)
 	)
 )
@@ -55,7 +56,7 @@
       (if (> (+ amount supply) membershipLimit)
         ERR_MEMBERSHIP_LIMIT_REACHED
         (begin
-          (asserts! (is-eq (get-contract-can-mint-by-address contract-caller) true) ERR_UNAUTHORIZED)
+          (try! (is-dao-or-extension))
           (print { type: "token", action: "minted", data: { amount: amount, recipient: recipient } })
           ;; (contract-call? token mint-for-dao amount recipient)
           (ft-mint? sGrant amount recipient)
@@ -68,7 +69,7 @@
     (if (> u1 (- supply amount))
       ERR_TOTAL_SUPPLY
       (begin
-        (asserts! (is-eq (get-contract-can-burn-by-address contract-caller) true) ERR_UNAUTHORIZED)
+        (try! (is-dao-or-extension))
         (ft-burn? sGrant amount owner)
       )
     )
