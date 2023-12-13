@@ -17,6 +17,7 @@
     can-burn: bool
   }
 )
+(define-constant contract-owner tx-sender)
 (define-constant membershipLimit u100000)
 (define-data-var dao-owner principal tx-sender)
 (define-data-var tokenName (string-ascii 32) "sGrant")
@@ -46,7 +47,8 @@
 ;; movement/ transactions
 (define-public (transfer (amount uint) (sender principal) (recipient principal))
 	(begin
-    (try! (is-dao-or-extension))
+    ;; (try! (is-dao-or-extension))
+    (asserts! (is-eq tx-sender contract-owner) ERR_UNAUTHORIZED)
 		(ft-transfer? sGrant amount sender recipient)
 	)
 )
@@ -56,7 +58,8 @@
       (if (> (+ amount supply) membershipLimit)
         ERR_MEMBERSHIP_LIMIT_REACHED
         (begin
-          (try! (is-dao-or-extension))
+          ;; (try! (is-dao-or-extension))
+          (asserts! (is-eq tx-sender contract-owner) ERR_UNAUTHORIZED)
           (print { type: "token", action: "minted", data: { amount: amount, recipient: recipient } })
           ;; (contract-call? token mint-for-dao amount recipient)
           (ft-mint? sGrant amount recipient)
@@ -69,7 +72,8 @@
     (if (> u1 (- supply amount))
       ERR_TOTAL_SUPPLY
       (begin
-        (try! (is-dao-or-extension))
+        ;; (try! (is-dao-or-extension))
+        (asserts! (is-eq tx-sender contract-owner) ERR_UNAUTHORIZED)
         (ft-burn? sGrant amount owner)
       )
     )

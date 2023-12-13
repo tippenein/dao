@@ -37,6 +37,7 @@ const mint = (amount: number, recipient: string) => {
 };
 
 describe('membership tokens', () => {
+  // simnet.callPublicFn('core', 'construct', [Cl.contractPrincipal(deployer, "bootstrap")], deployer);
   it('sets the dao owner initially', () => {
     const result = callPub('set-dao-owner', deployer, [
       Cl.standardPrincipal(deployer)
@@ -55,8 +56,8 @@ describe('membership tokens', () => {
       Cl.ok(Cl.uint(1010))
     );
   });
-  // it('disallows creating over the membership limit', () => {
-  //   const result = mint(2000, address1);
-  //   expect(result).toStrictEqual(Cl.uint(2002));
-  // });
+  it('disallows creating over the membership limit', () => {
+    const result = mint(20000000, address1);
+    expect(result).toStrictEqual(Cl.error(Cl.uint(2002)));
+  });
 });
