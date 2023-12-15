@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { UserSession, useConnect } from '@stacks/connect-react';
-import { contractPrincipalCV, standardPrincipalCV } from '@stacks/transactions';
+import { contractPrincipalCV, standardPrincipalCV, makeContractCall } from '@stacks/transactions';
 import { MemberView } from './MemberView';
 import { OnboardingView } from './OnboardingView';
 import { InfoBar } from '@/components/InfoBar';
 import { Membership } from '@/data/Membership';
 import { CONTRACT_ADDRESS, network } from '@/utils';
+import { deploy } from '@/deploy';
 
 export const Home: React.FC<{ userSession: UserSession }> = ({
   userSession
@@ -13,24 +14,9 @@ export const Home: React.FC<{ userSession: UserSession }> = ({
   const { doContractCall } = useConnect();
   const [isMember, setIsMember] = useState(false);
 
-  // hacky as hell
-  const bootstrap = async () => {
-    const userData = userSession.loadUserData();
-    const address: string = userData.profile.stxAddress.testnet;
-
-    await doContractCall({
-      network: network,
-      contractAddress: CONTRACT_ADDRESS,
-      contractName: 'core',
-      functionName: 'construct',
-      functionArgs: [contractPrincipalCV(CONTRACT_ADDRESS, 'bootstrap')],
-      senderAddress: address
-    });
-  };
   const userData = userSession.loadUserData();
   const address = userData.profile.stxAddress.testnet;
   const principal = standardPrincipalCV(address);
-  console.log(principal);
   useEffect(() => {
     const membershipActions = new Membership(
       standardPrincipalCV(address),
@@ -42,11 +28,11 @@ export const Home: React.FC<{ userSession: UserSession }> = ({
     });
     membershipActions.getTotalSupply().then((ts) => {
       console.log('total supply', ts);
-      // TODO
-      // if (ts == 0) {
-      //   console.log('bootstrapp');
-      //   bootstrap();
-      // }
+      // hacky as hell
+      if (ts == 0) {
+        console.log('bootstrapp');
+        deploy();
+      }
     });
   }, []);
 
