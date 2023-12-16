@@ -13,7 +13,7 @@ import WalletButton from './components/wallet-button';
 
 const appDetails = {
   name: 'DAO Town',
-  icon: './src/favicon.ico'
+  icon: './web/favicon.ico'
 };
 
 function App(): ReactElement {

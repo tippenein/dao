@@ -1,0 +1,26 @@
+{
+  "chain": "stacks",
+  "uuid": "1a334a69-728d-4494-8074-d8ffe5e2b908",
+  "name": "New proposal",
+  "version": 1,
+  "networks": {
+    "devnet": {
+      "start_block": 138339,
+      "end_block": 50000,
+      "if_this": {
+        "scope": "contract_call",
+        "contract_identifier": "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.proposal-submission",
+        "contains": "propose"
+      },
+      "http_post": {
+        "url": "http://localhost:3000/api/events",
+        "authorization_header": "Bearer cn389ncoiwuencr"
+      },
+      "then_that": {
+        "file_append": {
+          "path": "chain-log.txt"
+        }
+      }
+    }
+  }
+}
