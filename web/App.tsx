@@ -64,7 +64,12 @@ function App(): ReactElement {
     showConnect({
       appDetails,
       userSession,
-      onFinish: () => window.location.reload()
+      onFinish: ({ userSession }) => {
+        const userData = userSession.loadUserData();
+
+        setState((prevState) => ({ ...prevState, userData }));
+        window.location.reload();
+      }
     });
   };
   return (
@@ -73,12 +78,10 @@ function App(): ReactElement {
         <div className="flex items-center justify-center min-h-screen">
           <div className="mx-auto max-w-2xl px-4">
             <div className="border bg-background p-8">
-              {userSession.isUserSignedIn() && (
-                <Home />
-              )}
+              {userSession.isUserSignedIn() && <Home />}
             </div>
             <WalletButton
-              userData={userData}
+              userData={state.userData}
               connectWallet={connectWallet}
               disconnectWallet={disconnectWallet}
             />
