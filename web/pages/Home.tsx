@@ -6,17 +6,17 @@ import { OnboardingView } from './OnboardingView';
 import { InfoBar } from '@/components/InfoBar';
 import { Membership } from '@/data/Membership';
 import { CONTRACT_ADDRESS, network } from '@/utils';
+import { resolveSTXAddress, useSTXAddress } from '@/common/use-stx-address';
 
 export const Home: React.FC<{ userSession: UserSession }> = ({
   userSession
 }) => {
   const { doContractCall } = useConnect();
   const [isMember, setIsMember] = useState(false);
+  const address = useSTXAddress()
 
   // hacky as hell
   const bootstrap = async () => {
-    const userData = userSession.loadUserData();
-    const address: string = userData.profile.stxAddress.testnet;
 
     await doContractCall({
       network: network,
@@ -27,10 +27,7 @@ export const Home: React.FC<{ userSession: UserSession }> = ({
       senderAddress: address
     });
   };
-  const userData = userSession.loadUserData();
-  const address = userData.profile.stxAddress.testnet;
   const principal = standardPrincipalCV(address);
-  console.log(principal);
   useEffect(() => {
     const membershipActions = new Membership(
       standardPrincipalCV(address),
