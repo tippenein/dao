@@ -8,7 +8,7 @@
     "setup": "chmod +x ./scripts/* && bun install",
     "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
     "expose": "npx localtunnel --port 3000",
-    "chainhook": "chainhook service start --predicate-path=./predicates/proposals.json --predicate-path=./predicates/hello.json --config-path=./settings/Chainhook.toml",
+    "chainhook": "./scripts/hook-service.sh",
     "build": "tsc",
     "serve": "node ./dist/server.js"
   },

@@ -1,9 +1,9 @@
 import express, { Express, Request, Response } from 'express';
-import {db} from './db'
+import { db } from './db/db';
+import { allProposals } from './db/query';
 
 // Create a new express application
 const app: Express = express();
-
 
 // The port the express app will listen on
 const PORT = 3000;
@@ -31,27 +31,35 @@ function hexToUtf8(hex: string) {
 app.get('/', async (req, res) => {
   db.one('SELECT $1 AS value', 123)
     .then((data: any) => {
-      console.log('DATA:', data.value)
+      console.log('DATA:', data.value);
     })
     .catch((error: any) => {
-      console.log('ERROR:', error)
-    })
+      console.log('ERROR:', error);
+    });
   res.json({ message: 'Welcome to chainhook event api' });
 });
 app.get('/api/health', async (req, res) => {
-  console.log('health check')
+  console.log('health check');
   res.json({ status: 'ok' });
 });
 
+app.get('/api/proposals', async (req, res) => {
+  allProposals.then((data: any) => {
+    res.status(200).json({
+      status: 'success',
+      data: data,
+    });
+  });
+});
 app.post('/api/events', async (req, res) => {
-  console.log('event')
+  console.log('event');
   const events = req.body;
   events.apply.forEach((item: any) => {
     item.transactions.forEach((transaction: any) => {
-      console.log('transaction', transaction)
+      console.log('transaction', transaction);
       // If the transaction has operations, loop through them
       if (transaction.operations) {
-        console.log("operations")
+        console.log('operations');
         transaction.operations.forEach((operation: any) => {
           console.log({ operation });
         });

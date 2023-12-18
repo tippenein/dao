@@ -1,7 +1,7 @@
 {
   "chain": "stacks",
-  "uuid": "1a334a69-728d-4494-8074-d8ffe5e2b908",
-  "name": "New proposal",
+  "uuid": "67e8ad11-f8f5-4a53-a43a-11731bc54f16",
+  "name": "funding",
   "version": 1,
   "networks": {
     "devnet": {
@@ -9,12 +9,8 @@
       "end_block": 50000,
       "if_this": {
         "scope": "contract_call",
-        "contract_identifier": "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.proposal-submission",
+        "contract_identifier": "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.proposal-funding",
         "method": "stx-stacks"
-      },
-      "http_post": {
-        "url": "http://localhost:3000/api/events",
-        "authorization_header": "Bearer asdf"
       },
       "then_that": {
         "file_append": {

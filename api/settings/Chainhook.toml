@@ -34,7 +34,7 @@ max_number_of_processing_threads = 16
 max_number_of_networking_threads = 16
 max_caching_memory_size_mb = 32000
 
-# The TSV file is required for downloading historical data for your predicates. 
+# The TSV file is required for downloading historical data for your predicates.
 # If this is not a requirement, you can comment out the `tsv_file_url` line.
-[[event_source]]
-tsv_file_url = "https://archive.hiro.so/regtest/stacks-blockchain-api/regtest-stacks-blockchain-api-latest"
+# [[event_source]]
+# tsv_file_url = "https://archive.hiro.so/regtest/stacks-blockchain-api/regtest-stacks-blockchain-api-latest"
