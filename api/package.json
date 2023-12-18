@@ -8,13 +8,15 @@
     "setup": "chmod +x ./scripts/* && bun install",
     "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
     "expose": "npx localtunnel --port 3000",
-    "chainhook": "chainhook service start --predicate-path=./predicates/proposal.json --config-path=./settings/Chainhook.toml",
+    "chainhook": "chainhook service start --predicate-path=./predicates/proposals.json --predicate-path=./predicates/hello.json --config-path=./settings/Chainhook.toml",
     "build": "tsc",
     "serve": "node ./dist/server.js"
   },
   "dependencies": {
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "file-type": "^18.5.0"
+    "file-type": "^18.5.0",
+    "pg-promise": "^11.5.4"
   },
   "devDependencies": {
     "localtunnel": "^2.0.2",

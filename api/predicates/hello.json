@@ -1,15 +1,15 @@
 {
   "chain": "stacks",
-  "uuid": "1a334a69-728d-4494-8074-d8ffe5e2b908",
-  "name": "New proposal",
+  "uuid": "d7fc3e0c-98a8-461f-8f8a-c3a585e25852",
+  "name": "Hello world",
   "version": 1,
   "networks": {
     "devnet": {
-      "start_block": 138339,
+      "start_block": 34239,
       "end_block": 50000,
       "if_this": {
         "scope": "contract_call",
-        "contract_identifier": "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.proposal-submission",
+        "contract_identifier": "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.hello",
         "method": "stx-stacks"
       },
       "http_post": {
@@ -18,7 +18,7 @@
       },
       "then_that": {
         "file_append": {
-          "path": "chain-log.txt"
+          "path": "../chain-log.txt"
         }
       }
     }

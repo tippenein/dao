@@ -1,2 +1,5 @@
 chain-log.txt
+.env
+.env.production
+.env.local
 /cache
