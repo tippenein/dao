@@ -6,7 +6,6 @@ const pgp = pgpromise();
 
 dotenv.config();
 
-// const connectionString = `postgres://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 const cn = {
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT),

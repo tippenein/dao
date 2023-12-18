@@ -1,0 +1,6 @@
+CREATE TABLE proposals(
+  ID SERIAL PRIMARY KEY,
+  proposer VARCHAR NOT NULL,
+  title VARCHAR NOT NULL,
+  description VARCHAR NOT NULL
+);
