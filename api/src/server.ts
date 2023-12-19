@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import { db } from './db/db';
-import { allProposals } from './db/query';
+import { allProposals, getStats } from './db/query';
 
 // Create a new express application
 const app: Express = express();
@@ -43,11 +43,20 @@ app.get('/api/health', async (req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.get('/api/proposals/stats', async (req, res) => {
+  getStats.then((data: any) => {
+    res.status(200).json({
+      status: 'success',
+      data: data
+    });
+  })
+});
+
 app.get('/api/proposals', async (req, res) => {
   allProposals.then((data: any) => {
     res.status(200).json({
       status: 'success',
-      data: data,
+      data: data
     });
   });
 });
