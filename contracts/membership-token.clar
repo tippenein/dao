@@ -31,19 +31,6 @@
   (ok (asserts! (or (is-eq tx-sender contract-owner) (is-eq tx-sender .core) (contract-call? .core is-extension contract-caller)) ERR_UNAUTHORIZED))
 )
 
-;; (define-read-only (get-contract-can-mint-by-address (address principal))
-;;   (default-to
-;;     false
-;;     (get can-mint (map-get? contracts-data address))
-;;   )
-;; )
-
-;; (define-read-only (get-contract-can-burn-by-address (address principal))
-;;   (default-to
-;;     false
-;;     (get can-burn (map-get? contracts-data address))
-;;   )
-;; )
 ;; movement/ transactions
 (define-public (transfer (amount uint) (sender principal) (recipient principal))
 	(begin
