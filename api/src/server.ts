@@ -1,7 +1,13 @@
 import express, { Express, Request, Response } from 'express';
 import { db } from './db/db';
-import { allProposals, getStats } from './db/query';
+import {
+  allProposals,
+  getStats,
+  insertProposal,
+  updateProposalStart
+} from './db/query';
 import cors from 'cors';
+import { FUNDING_UUID, PROPOSAL_UUID } from './util';
 
 // Create a new express application
 const app: Express = express();
@@ -68,7 +74,7 @@ app.post('/api/events', async (req, res) => {
       if (transaction.operations) {
         console.log('operations');
         transaction.operations.forEach((operation: any) => {
-          console.log(operation);
+          handleOperation(operation);
         });
       }
     });
@@ -77,6 +83,25 @@ app.post('/api/events', async (req, res) => {
   // Send a response back to Chainhook to acknowledge receipt of the event
   res.status(200).send({ message: 'Proposal added!' });
 });
+
+const handleOperation = (operation: any) => {
+  if (operation.scope == 'contract_called') {
+    switch (operation.uuid) {
+      case FUNDING_UUID:
+        updateProposalStart(operation.uuid);
+        break;
+      case PROPOSAL_UUID:
+        insertProposal(
+          operation.data.title,
+          operation.data.description,
+          operation.data.proposer
+        );
+        break;
+      default:
+        console.log('uncaught UUID:', operation.uuid);
+    }
+  }
+};
 
 // Start server on port 3000
 app.listen(PORT, () => {

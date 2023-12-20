@@ -29,16 +29,22 @@ export class Proposal {
     this.address = address;
   }
 
-  submit = async (stxAddress: PrincipalCV, title: string, description: string, milestones: number, amountPer: number) => {
-    console.log("ARGS")
-    console.log(milestones)
-    console.log(amountPer)
-    console.log(title)
-    console.log(description)
+  submit = async (
+    stxAddress: PrincipalCV,
+    title: string,
+    description: string,
+    milestones: number,
+    amountPer: number
+  ) => {
+    console.log('ARGS');
+    console.log(milestones);
+    console.log(amountPer);
+    console.log(title);
+    console.log(description);
     await this.doContractCall({
       network: network,
       contractAddress: CONTRACT_ADDRESS,
-      stxAddress: stxAddress,
+      // stxAddress: stxAddress,
       contractName: 'proposal-submission',
       functionName: 'propose',
       functionArgs: [

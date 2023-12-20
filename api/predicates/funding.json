@@ -10,11 +10,12 @@
       "if_this": {
         "scope": "contract_call",
         "contract_identifier": "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.proposal-funding",
-        "method": "stx-stacks"
+        "method": "start"
       },
       "then_that": {
-        "file_append": {
-          "path": "chain-log.txt"
+        "http_post": {
+          "url": "http://localhost:3000/api/events",
+          "authorization_header": ""
         }
       }
     }

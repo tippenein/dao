@@ -64,7 +64,13 @@ export const MemberView: React.FC<{ address: PrincipalCV }> = ({ address }) => {
   const handlePropose = async (event: React.FormEvent) => {
     event.preventDefault();
     console.log('proposing');
-    proposalActions.submit(address, title, description, milestones, amountPerMilestone);
+    proposalActions.submit(
+      address,
+      title,
+      description,
+      milestones,
+      amountPerMilestone
+    );
     setIsProposalModalOpen(false);
   };
   const handleHello = (event: React.FormEvent) => {
