@@ -7,26 +7,14 @@ import { InfoBar } from '@/components/InfoBar';
 import { Membership } from '@/data/Membership';
 import { CONTRACT_ADDRESS, network } from '@/utils';
 import { resolveSTXAddress, useSTXAddress } from '@/common/use-stx-address';
+import { truncateAddress } from '@/lib/utils';
+import { Divider } from '@/components/ui/divider';
 
-export const Home: React.FC<{ userSession: UserSession }> = ({
-  userSession
-}) => {
+export const Home: React.FC = () => {
   const { doContractCall } = useConnect();
   const [isMember, setIsMember] = useState(false);
   const address = useSTXAddress()
 
-  // hacky as hell
-  const bootstrap = async () => {
-
-    await doContractCall({
-      network: network,
-      contractAddress: CONTRACT_ADDRESS,
-      contractName: 'core',
-      functionName: 'construct',
-      functionArgs: [contractPrincipalCV(CONTRACT_ADDRESS, 'bootstrap')],
-      senderAddress: address
-    });
-  };
   const principal = standardPrincipalCV(address);
   useEffect(() => {
     const membershipActions = new Membership(
@@ -50,6 +38,7 @@ export const Home: React.FC<{ userSession: UserSession }> = ({
   return (
     <>
       <h1 className="text-4xl font-bold">DAO Town</h1>
+      <h2 className="text-lg font-bold text-gray-700">{truncateAddress(address)}</h2>
       <InfoBar address={principal} />
       <div className="h-60 sm:h-72 flex items-center justify-center">
         <div className="py-4">

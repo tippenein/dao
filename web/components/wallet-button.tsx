@@ -2,7 +2,7 @@ import { UserData } from '@stacks/connect';
 import React from 'react';
 
 interface WalletButtonProps {
-  userData: UserData | undefined;
+  userData: UserData | null;
   connectWallet: () => void;
   disconnectWallet: () => void;
 }

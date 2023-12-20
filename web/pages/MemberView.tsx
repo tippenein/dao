@@ -1,25 +1,19 @@
 import { useState, type JSX, useEffect } from 'react';
 import { Button } from '../components/ui/button';
 import { Input } from '@/components/ui/input';
-import { truncateAddress } from '@/lib/utils';
-import {
-  UserSession,
-  openContractCall,
-  useConnect
-} from '@stacks/connect-react';
+import { useConnect } from '@stacks/connect-react';
 import { env, CONTRACT_ADDRESS, network } from '@/utils';
-import {
-  callReadOnlyFunction,
-  standardPrincipalCV,
-  cvToValue,
-  uintCV,
-  PrincipalCV
-} from '@stacks/transactions';
+import { standardPrincipalCV, PrincipalCV } from '@stacks/transactions';
 import { Divider } from '@/components/ui/divider';
 import { Membership } from '@/data/Membership';
 import { Proposal } from '@/data/Proposal';
+import axios from 'axios';
+import StatsView from '@/components/ProposalStats';
+import { useProposalStore } from '@/store/proposalStore';
 
 export const MemberView: React.FC<{ address: PrincipalCV }> = ({ address }) => {
+  const { setProposals, setStats } = useProposalStore();
+
   const [amount, setAmount] = useState(1);
   const [recipient, setRecipient] = useState('');
   const [title, setTitle] = useState('');
@@ -28,6 +22,29 @@ export const MemberView: React.FC<{ address: PrincipalCV }> = ({ address }) => {
   const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
   const { doContractCall } = useConnect();
 
+  useEffect(() => {
+    // Fetch proposals
+    console.log('fetching');
+    axios
+      .get('http://localhost:3000/api/proposals')
+      .then((response) => {
+        setProposals(response.data.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching proposals:', error);
+      });
+
+    // Fetch stats
+    axios
+      .get('http://localhost:3000/api/proposals/stats')
+      .then((response) => {
+        console.log(response.data.data.data);
+        setStats(response.data.data.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching stats:', error);
+      });
+  }, []);
   const membershipActions = new Membership(address, doContractCall);
   const proposalActions = new Proposal(address, doContractCall);
   const handleMint = (event: React.FormEvent) => {
@@ -142,6 +159,7 @@ export const MemberView: React.FC<{ address: PrincipalCV }> = ({ address }) => {
       )}
       <div className=" py-8">
         <h2 className="font-bold">Proposals</h2>
+        <StatsView />
         <div className="py-2">
           <Button onClick={() => setIsProposalModalOpen(true)}>
             <span>Start Proposal</span>

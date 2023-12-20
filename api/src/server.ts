@@ -1,9 +1,11 @@
 import express, { Express, Request, Response } from 'express';
 import { db } from './db/db';
 import { allProposals, getStats } from './db/query';
+import cors from 'cors';
 
 // Create a new express application
 const app: Express = express();
+app.use(cors()); // Use cors middleware
 
 // The port the express app will listen on
 const PORT = 3000;
@@ -29,13 +31,6 @@ function hexToUtf8(hex: string) {
 
 // Routes
 app.get('/', async (req, res) => {
-  db.one('SELECT $1 AS value', 123)
-    .then((data: any) => {
-      console.log('DATA:', data.value);
-    })
-    .catch((error: any) => {
-      console.log('ERROR:', error);
-    });
   res.json({ message: 'Welcome to chainhook event api' });
 });
 app.get('/api/health', async (req, res) => {
@@ -44,12 +39,15 @@ app.get('/api/health', async (req, res) => {
 });
 
 app.get('/api/proposals/stats', async (req, res) => {
-  getStats.then((data: any) => {
+  getStats.then(({ concluded_total, proposed_total }) => {
     res.status(200).json({
       status: 'success',
-      data: data
+      data: {
+        totalConcluded: Number(concluded_total),
+        totalProposed: Number(proposed_total)
+      }
     });
-  })
+  });
 });
 
 app.get('/api/proposals', async (req, res) => {
@@ -70,7 +68,7 @@ app.post('/api/events', async (req, res) => {
       if (transaction.operations) {
         console.log('operations');
         transaction.operations.forEach((operation: any) => {
-          console.log({ operation });
+          console.log(operation);
         });
       }
     });
