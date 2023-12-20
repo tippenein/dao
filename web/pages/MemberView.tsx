@@ -73,25 +73,8 @@ export const MemberView: React.FC<{ address: PrincipalCV }> = ({ address }) => {
     );
     setIsProposalModalOpen(false);
   };
-  const handleHello = (event: React.FormEvent) => {
-    event.preventDefault();
-    doContractCall({
-      network,
-      contractAddress: CONTRACT_ADDRESS,
-      contractName: 'hello',
-      functionName: 'hello',
-      functionArgs: []
-    });
-  };
   return (
     <>
-      <Button
-        onClick={handleHello}
-        value="Hello"
-        className="px-4 py-2 text-white bg-indigo-500 rounded hover:bg-indigo-700"
-      >
-        Hello
-      </Button>
       {isProposalModalOpen && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"

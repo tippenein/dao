@@ -75,11 +75,9 @@ function App(): ReactElement {
   return (
     <Connect authOptions={authOptions}>
       <AppContext.Provider value={[state, setState]}>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="mx-auto max-w-2xl px-4">
-            <div className="border bg-background p-8">
-              {userSession.isUserSignedIn() && <Home />}
-            </div>
+        <div className="w-screen h-screen flex flex-col">
+          <div className="h-full">
+            {userSession.isUserSignedIn() && <Home />}
             <WalletButton
               userData={state.userData}
               connectWallet={connectWallet}
