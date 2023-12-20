@@ -17,6 +17,8 @@ export const MemberView: React.FC<{ address: PrincipalCV }> = ({ address }) => {
   const [amount, setAmount] = useState(1);
   const [recipient, setRecipient] = useState('');
   const [title, setTitle] = useState('');
+  const [milestones, setMilestones] = useState(0);
+  const [amountPerMilestone, setAmountPerMilestone] = useState(0);
   const [description, setDescription] = useState('');
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
   const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
@@ -59,13 +61,10 @@ export const MemberView: React.FC<{ address: PrincipalCV }> = ({ address }) => {
     membershipActions.transfer(amount, standardPrincipalCV(recipient));
     setIsTransferModalOpen(false);
   };
-  const handlePropose = async (
-    event: React.FormEvent,
-    title: string,
-    description: string
-  ) => {
+  const handlePropose = async (event: React.FormEvent) => {
     event.preventDefault();
-    proposalActions.submit(title, description);
+    console.log('proposing');
+    proposalActions.submit(address, title, description, milestones, amountPerMilestone);
     setIsProposalModalOpen(false);
   };
   const handleHello = (event: React.FormEvent) => {
@@ -110,6 +109,24 @@ export const MemberView: React.FC<{ address: PrincipalCV }> = ({ address }) => {
                 onChange={(e) => setDescription(e.target.value)}
                 className="mt-1 px-3 py-2 block w-full rounded-md border-gray-300 shadow-sm h-20 overflow-auto resize-none"
                 rows={6}
+              />
+              <span className="font-bold text-gray-700">Milestones</span>
+              <Input
+                type="number"
+                value={milestones}
+                onChange={(e) => setMilestones(Number(e.target.value))}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              />
+              <span className="font-bold text-gray-700">
+                Amount per milestone
+              </span>
+              <Input
+                type="number"
+                value={amountPerMilestone}
+                onChange={(e) => {
+                  setAmountPerMilestone(Number(e.target.value));
+                }}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
               />
             </label>
             <Divider />

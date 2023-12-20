@@ -1,24 +1,23 @@
 {
   "chain": "stacks",
   "uuid": "a7fc3e0c-98a8-461f-8f8a-c3a585e25852",
-  "name": "Hello world",
+  "name": "hello",
   "version": 1,
   "networks": {
     "devnet": {
       "start_block": 0,
-      "end_block": 50000,
+      "end_block": null,
+      "decode_clarity_values":true,
+      "expire_after_occurrence":null,
       "if_this": {
-        "scope": "print_event",
+        "scope": "contract_call",
         "contract_identifier": "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.hello",
-        "contains": "Hello"
-      },
-      "http_post": {
-        "url": "http://localhost:3000/api/events",
-        "authorization_header": "Bearer asdf"
+        "method": "hello"
       },
       "then_that": {
-        "file_append": {
-          "path": "../chain-log.txt"
+        "http_post": {
+          "url": "http://localhost:3000/api/events",
+          "authorization_header": ""
         }
       }
     }

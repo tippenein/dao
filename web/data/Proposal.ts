@@ -3,9 +3,11 @@ import { StacksNetwork } from '@stacks/network';
 import {
   PrincipalCV,
   callReadOnlyFunction,
+  standardPrincipalCV,
   cvToValue,
   stringAsciiCV,
-  uintCV
+  uintCV,
+  contractPrincipalCV
 } from '@stacks/transactions';
 
 type DoContractCallArgs = {
@@ -27,16 +29,24 @@ export class Proposal {
     this.address = address;
   }
 
-  submit = async (title: string, description: string) => {
+  submit = async (stxAddress: PrincipalCV, title: string, description: string, milestones: number, amountPer: number) => {
+    console.log("ARGS")
+    console.log(milestones)
+    console.log(amountPer)
+    console.log(title)
+    console.log(description)
     await this.doContractCall({
       network: network,
       contractAddress: CONTRACT_ADDRESS,
+      stxAddress: stxAddress,
       contractName: 'proposal-submission',
       functionName: 'propose',
       functionArgs: [
-        this.address,
+        contractPrincipalCV(CONTRACT_ADDRESS, 'proposal-trait'),
         stringAsciiCV(title),
-        stringAsciiCV(description)
+        stringAsciiCV(description),
+        uintCV(milestones),
+        uintCV(amountPer)
       ]
     });
   };

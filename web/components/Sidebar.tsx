@@ -9,7 +9,7 @@ export const Sidebar: React.FC = () => {
   const principal = standardPrincipalCV(address);
 
   return (
-    <div className="w-64 bg-gray-200 p-4">
+    <div className="w-1/5 bg-gray-200 p-4">
       <InfoBar address={principal} />
       <ProposalStats />
     </div>

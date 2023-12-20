@@ -32,12 +32,12 @@ export const Home: React.FC = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-grow">
+      <div className="flex-grow ">
         <h1 className="text-4xl font-bold">DAO Town</h1>
         <h2 className="text-lg font-bold text-gray-700">
           {truncateAddress(address)}
         </h2>
-        <div className="h-60 sm:h-72 flex items-center justify-center">
+        <div className="w-4/5 h-60 sm:h-72 flex items-center justify-center">
           <div className="py-4">
             {isMember ? <MemberView address={principal} /> : <OnboardingView />}
           </div>
