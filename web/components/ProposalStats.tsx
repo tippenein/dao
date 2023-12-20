@@ -2,8 +2,7 @@ import React from 'react';
 import { useProposalStore } from '@/store/proposalStore';
 
 const StatsView: React.FC = () => {
-  const { stats } = useProposalStore();
-  console.log("stats", stats)
+  const stats = useProposalStore.getState().stats;
 
   return (
     <div>

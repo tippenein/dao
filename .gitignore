@@ -269,3 +269,5 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/node,jetbrains+all,visualstudiocode,macos
 history.txt
+lcov.info
+*-reports.json

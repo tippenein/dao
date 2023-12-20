@@ -15,8 +15,18 @@ path = 'contracts/extension-trait.clar'
 clarity_version = 2
 epoch = 2.4
 
+[contracts.hello]
+path = 'contracts/hello.clar'
+clarity_version = 2
+epoch = 2.4
+
 [contracts.membership-token]
 path = 'contracts/membership-token.clar'
+clarity_version = 2
+epoch = 2.4
+
+[contracts.proposal-funding]
+path = 'contracts/proposal-funding.clar'
 clarity_version = 2
 epoch = 2.4
 
@@ -32,6 +42,21 @@ epoch = 2.4
 
 [contracts.proposal-voting]
 path = 'contracts/proposal-voting.clar'
+clarity_version = 2
+epoch = 2.4
+
+[contracts.test-bootstrap]
+path = 'contracts/tests/test-bootstrap.clar'
+clarity_version = 2
+epoch = 2.4
+
+[contracts.test-extension]
+path = 'contracts/tests/test-extension.clar'
+clarity_version = 2
+epoch = 2.4
+
+[contracts.test-proposal]
+path = 'contracts/tests/test-proposal.clar'
 clarity_version = 2
 epoch = 2.4
 [repl.analysis]

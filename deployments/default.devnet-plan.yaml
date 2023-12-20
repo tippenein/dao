@@ -30,24 +30,59 @@ plan:
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
+            contract-name: hello
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 550
+            path: contracts/hello.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
             contract-name: membership-token
             expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            cost: 30180
+            cost: 26690
             path: contracts/membership-token.clar
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
             contract-name: proposal-voting
             expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            cost: 26010
+            cost: 37180
             path: contracts/proposal-voting.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: proposal-funding
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 33000
+            path: contracts/proposal-funding.clar
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
             contract-name: proposal-submission
             expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            cost: 12130
+            cost: 11640
             path: contracts/proposal-submission.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: test-bootstrap
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 8350
+            path: contracts/tests/test-bootstrap.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: test-extension
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 25770
+            path: contracts/tests/test-extension.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: test-proposal
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 1550
+            path: contracts/tests/test-proposal.clar
             anchor-block-only: true
             clarity-version: 2
       epoch: "2.4"

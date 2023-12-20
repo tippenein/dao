@@ -38,8 +38,7 @@ export const MemberView: React.FC<{ address: PrincipalCV }> = ({ address }) => {
     axios
       .get('http://localhost:3000/api/proposals/stats')
       .then((response) => {
-        console.log(response.data.data.data);
-        setStats(response.data.data.data);
+        setStats(response.data.data);
       })
       .catch((error) => {
         console.error('Error fetching stats:', error);
@@ -159,7 +158,6 @@ export const MemberView: React.FC<{ address: PrincipalCV }> = ({ address }) => {
       )}
       <div className=" py-8">
         <h2 className="font-bold">Proposals</h2>
-        <StatsView />
         <div className="py-2">
           <Button onClick={() => setIsProposalModalOpen(true)}>
             <span>Start Proposal</span>
